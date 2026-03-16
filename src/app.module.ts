@@ -4,6 +4,8 @@ import { AppEnvironment, getAppConfig } from './config/app.config';
 import { getDatabaseConfig } from './config/database.config';
 import { daos } from './common/dao';
 import { HealthModule } from './modules/health/health.module';
+import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 const appConfig = getAppConfig();
 const databaseConfig = getDatabaseConfig();
@@ -30,6 +32,8 @@ const databaseConfig = getDatabaseConfig();
       synchronize: false,
     }),
     HealthModule,
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
