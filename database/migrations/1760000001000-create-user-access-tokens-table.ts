@@ -15,32 +15,36 @@ export class CreateUserAccessTokensTable1760000001000
         columns: [
           {
             name: 'id',
-            type: 'uuid',
+            type: 'char',
+            length: '36',
             isPrimary: true,
           },
           {
             name: 'user_id',
-            type: 'uuid',
+            type: 'char',
+            length: '36',
           },
           {
             name: 'access_token',
-            type: 'text',
+            type: 'varchar',
+            length: '512',
             isUnique: true,
           },
           {
             name: 'refresh_token',
-            type: 'text',
+            type: 'varchar',
+            length: '512',
             isUnique: true,
           },
           {
             name: 'created_at',
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'updated_at',
             type: 'timestamp',
-            default: 'now()',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'deleted_at',

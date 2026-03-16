@@ -46,15 +46,15 @@ describe('HealthController', () => {
     });
   });
 
-  describe('getPostgresHealth', () => {
+  describe('getMysqlHealth', () => {
     it('should be defined', () => {
-      expect(healthController.getPostgresHealth).toBeDefined();
+      expect(healthController.getMysqlHealth).toBeDefined();
     });
 
     it('should return the result of check method', async () => {
       mockHealthCheckService.check.mockReturnValueOnce('result');
 
-      const result = await healthController.getPostgresHealth();
+      const result = await healthController.getMysqlHealth();
 
       expect(mockHealthCheckService.check).toHaveBeenCalled();
       expect(result).toEqual('result');
@@ -63,7 +63,7 @@ describe('HealthController', () => {
     it('should call check method with array of functions with pingCheck', async () => {
       mockTypeOrmHealthIndicator.pingCheck.mockReturnValueOnce('result');
 
-      await healthController.getPostgresHealth();
+      await healthController.getMysqlHealth();
 
       const result = mockHealthCheckService.check.mock.calls[0][0][0]();
 

@@ -7,7 +7,7 @@ const appConfig = getAppConfig();
 const databaseConfig = getDatabaseConfig();
 
 export const dataSource = new DataSource({
-  type: 'postgres',
+  type: 'mysql',
   host: databaseConfig.host,
   port: databaseConfig.port,
   username: databaseConfig.username,

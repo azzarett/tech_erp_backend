@@ -12,7 +12,7 @@ const databaseConfig = getDatabaseConfig();
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'postgres',
+      type: 'mysql',
       host: databaseConfig.host,
       port: databaseConfig.port,
       username: databaseConfig.username,

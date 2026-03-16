@@ -19,9 +19,9 @@ export class HealthController {
     return { status: 'ok' };
   }
 
-  @Get('/postgres')
+  @Get('/mysql')
   @HealthCheck()
-  getPostgresHealth() {
+  getMysqlHealth() {
     return this.healthCheckService.check([
       () => this.typeOrmHealthIndicator.pingCheck('database'),
     ]);

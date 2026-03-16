@@ -11,13 +11,13 @@ import { UserAccessTokenDao } from './user-access-token.dao';
 
 @Entity('users')
 export class UserDao {
-  @PrimaryColumn({ name: 'id', type: 'uuid' })
+  @PrimaryColumn({ name: 'id', type: 'char', length: 36 })
   id: string;
 
-  @Column({ name: 'identifier', type: 'text', unique: true })
+  @Column({ name: 'identifier', type: 'varchar', length: 255, unique: true })
   identifier: string;
 
-  @Column({ name: 'password', type: 'text' })
+  @Column({ name: 'password', type: 'varchar', length: 255 })
   password: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })

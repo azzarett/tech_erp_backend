@@ -10,10 +10,16 @@ export class AlterUsersAuthColumns1760000000000 implements MigrationInterface {
     await queryRunner.addColumns('users', [
       new TableColumn({
         name: 'identifier',
-        type: 'text',
+        type: 'varchar',
+        length: '255',
         isNullable: true,
       }),
-      new TableColumn({ name: 'password', type: 'text', isNullable: true }),
+      new TableColumn({
+        name: 'password',
+        type: 'varchar',
+        length: '255',
+        isNullable: true,
+      }),
     ]);
 
     await queryRunner.createUniqueConstraint(
@@ -25,7 +31,7 @@ export class AlterUsersAuthColumns1760000000000 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      `UPDATE users SET identifier = id::text WHERE identifier IS NULL`,
+      `UPDATE users SET identifier = CAST(id AS CHAR(36)) WHERE identifier IS NULL`,
     );
     await queryRunner.query(
       `UPDATE users SET password = '' WHERE password IS NULL`,
@@ -36,7 +42,8 @@ export class AlterUsersAuthColumns1760000000000 implements MigrationInterface {
       'identifier',
       new TableColumn({
         name: 'identifier',
-        type: 'text',
+        type: 'varchar',
+        length: '255',
         isNullable: false,
       }),
     );
@@ -46,7 +53,8 @@ export class AlterUsersAuthColumns1760000000000 implements MigrationInterface {
       'password',
       new TableColumn({
         name: 'password',
-        type: 'text',
+        type: 'varchar',
+        length: '255',
         isNullable: false,
       }),
     );

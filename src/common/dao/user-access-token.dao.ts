@@ -12,16 +12,16 @@ import { UserDao } from './user.dao';
 
 @Entity('user_access_tokens')
 export class UserAccessTokenDao {
-  @PrimaryColumn({ name: 'id', type: 'uuid' })
+  @PrimaryColumn({ name: 'id', type: 'char', length: 36 })
   id: string;
 
-  @Column({ name: 'user_id', type: 'uuid' })
+  @Column({ name: 'user_id', type: 'char', length: 36 })
   userId: string;
 
-  @Column({ name: 'access_token', type: 'text', unique: true })
+  @Column({ name: 'access_token', type: 'varchar', length: 512, unique: true })
   accessToken: string;
 
-  @Column({ name: 'refresh_token', type: 'text', unique: true })
+  @Column({ name: 'refresh_token', type: 'varchar', length: 512, unique: true })
   refreshToken: string;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
