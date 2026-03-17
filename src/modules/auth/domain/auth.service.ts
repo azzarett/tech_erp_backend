@@ -140,7 +140,7 @@ export class AuthService {
       throw new HttpException('Session not found', HttpStatus.NOT_FOUND);
     }
 
-    await this.userAccessTokensRepository.softDeleteByAccessToken(accessToken);
+    await this.userAccessTokensRepository.softDeleteById(session.id);
   }
 
   private async getTokens(userId: string): Promise<TokenPairDto> {

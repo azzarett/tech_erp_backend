@@ -41,4 +41,8 @@ export class UserAccessTokensRepository {
   async softDeleteByRefreshToken(refreshToken: string): Promise<void> {
     await this.userAccessTokensRepository.softDelete({ refreshToken });
   }
+
+  async softDeleteById(id: string): Promise<void> {
+    await this.userAccessTokensRepository.softDelete({ id });
+  }
 }
