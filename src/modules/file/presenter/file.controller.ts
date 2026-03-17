@@ -14,7 +14,13 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { Response } from 'express';
@@ -49,6 +55,36 @@ export class FileController {
 
   @Post('/upload')
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['file'],
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            name: { type: 'string' },
+            extension: { type: 'string' },
+            mime_type: { type: 'string' },
+            size: { type: 'number' },
+            upload_date: { type: 'string' },
+          },
+        },
+      },
+    },
+  })
   @UseInterceptors(FileInterceptor('file', { storage: uploadStorage }))
   async upload(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
@@ -63,6 +99,35 @@ export class FileController {
   }
 
   @Get('/list')
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              name: { type: 'string' },
+              extension: { type: 'string' },
+              mime_type: { type: 'string' },
+              size: { type: 'number' },
+              upload_date: { type: 'string' },
+            },
+          },
+        },
+        meta: {
+          type: 'object',
+          properties: {
+            page: { type: 'number' },
+            list_size: { type: 'number' },
+            total: { type: 'number' },
+          },
+        },
+      },
+    },
+  })
   async list(@Query() query: ListFilesQuery) {
     const result = await this.filesService.listFiles({
       page: query.page,
@@ -80,6 +145,19 @@ export class FileController {
   }
 
   @Delete('/delete/:id')
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+          },
+        },
+      },
+    },
+  })
   async delete(@Param('id') id: string) {
     await this.filesService.deleteFileById(id);
 
@@ -91,6 +169,24 @@ export class FileController {
   }
 
   @Get('/:id')
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            name: { type: 'string' },
+            extension: { type: 'string' },
+            mime_type: { type: 'string' },
+            size: { type: 'number' },
+            upload_date: { type: 'string' },
+          },
+        },
+      },
+    },
+  })
   async getById(@Param('id') id: string) {
     const file = await this.filesService.getFileById(id);
 
@@ -100,6 +196,12 @@ export class FileController {
   }
 
   @Get('/download/:id')
+  @ApiOkResponse({
+    schema: {
+      type: 'string',
+      format: 'binary',
+    },
+  })
   async download(@Param('id') id: string, @Res() response: Response) {
     const file = await this.filesService.getFileById(id);
     const extensionSuffix = file.extension ? `.${file.extension}` : '';
@@ -112,6 +214,36 @@ export class FileController {
 
   @Put('/update/:id')
   @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['file'],
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+            name: { type: 'string' },
+            extension: { type: 'string' },
+            mime_type: { type: 'string' },
+            size: { type: 'number' },
+            upload_date: { type: 'string' },
+          },
+        },
+      },
+    },
+  })
   @UseInterceptors(FileInterceptor('file', { storage: uploadStorage }))
   async update(
     @Param('id') id: string,

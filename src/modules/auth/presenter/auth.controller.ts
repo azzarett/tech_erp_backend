@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Request } from 'express';
 import { AuthenticatedUser } from 'src/common/decorators';
 import { User } from 'src/common/entities';
@@ -13,6 +18,51 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/signup')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['id', 'password'],
+      properties: {
+        id: { type: 'string', example: 'user@example.com' },
+        password: { type: 'string', example: 'password123' },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            user: {
+              type: 'object',
+              properties: {
+                id: { type: 'string', example: 'user@example.com' },
+              },
+            },
+            auth: {
+              type: 'object',
+              properties: {
+                access: {
+                  type: 'object',
+                  properties: {
+                    token: { type: 'string' },
+                  },
+                },
+                refresh: {
+                  type: 'object',
+                  properties: {
+                    token: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
   async signUp(@Body() body: SignUpBody) {
     const result = await this.authService.signUp({
       identifier: body.id,
@@ -30,6 +80,51 @@ export class AuthController {
   }
 
   @Post('/signin')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['id', 'password'],
+      properties: {
+        id: { type: 'string', example: 'user@example.com' },
+        password: { type: 'string', example: 'password123' },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            user: {
+              type: 'object',
+              properties: {
+                id: { type: 'string', example: 'user@example.com' },
+              },
+            },
+            auth: {
+              type: 'object',
+              properties: {
+                access: {
+                  type: 'object',
+                  properties: {
+                    token: { type: 'string' },
+                  },
+                },
+                refresh: {
+                  type: 'object',
+                  properties: {
+                    token: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
   async signIn(@Body() body: SignInBody) {
     const result = await this.authService.signIn({
       identifier: body.id,
@@ -47,6 +142,44 @@ export class AuthController {
   }
 
   @Post('/signin/new_token')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['refresh_token'],
+      properties: {
+        refresh_token: { type: 'string' },
+      },
+    },
+  })
+  @ApiCreatedResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            auth: {
+              type: 'object',
+              properties: {
+                access: {
+                  type: 'object',
+                  properties: {
+                    token: { type: 'string' },
+                  },
+                },
+                refresh: {
+                  type: 'object',
+                  properties: {
+                    token: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
   async refreshToken(@Body() body: RefreshTokenBody) {
     const auth = await this.authService.refreshToken(body.refresh_token);
 
@@ -59,6 +192,19 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/info')
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            id: { type: 'string' },
+          },
+        },
+      },
+    },
+  })
   async info(@AuthenticatedUser() user: User) {
     return {
       data: {
@@ -69,6 +215,19 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/logout')
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+          },
+        },
+      },
+    },
+  })
   async logout(@Req() request: Request) {
     const token = (request.get('Authorization') || '')
       .replace('Bearer', '')

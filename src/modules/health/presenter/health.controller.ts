@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import {
   HealthCheck,
   HealthCheckService,
@@ -15,12 +15,28 @@ export class HealthController {
   ) {}
 
   @Get()
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string', example: 'ok' },
+      },
+    },
+  })
   getHealth() {
     return { status: 'ok' };
   }
 
   @Get('/mysql')
   @HealthCheck()
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string', example: 'ok' },
+      },
+    },
+  })
   getMysqlHealth() {
     return this.healthCheckService.check([
       () => this.typeOrmHealthIndicator.pingCheck('database'),
