@@ -6,6 +6,7 @@ import { daos } from './common/dao';
 import { HealthModule } from './modules/health/health.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { FileModule } from './modules/file/file.module';
 
 const appConfig = getAppConfig();
 const databaseConfig = getDatabaseConfig();
@@ -34,6 +35,7 @@ const databaseConfig = getDatabaseConfig();
     HealthModule,
     UsersModule,
     AuthModule,
+    FileModule,
   ],
 })
 export class AppModule {}

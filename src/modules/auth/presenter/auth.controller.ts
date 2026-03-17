@@ -15,14 +15,14 @@ export class AuthController {
   @Post('/signup')
   async signUp(@Body() body: SignUpBody) {
     const result = await this.authService.signUp({
-      identifier: body.identifier,
+      identifier: body.id,
       password: body.password,
     });
 
     return {
       data: {
         user: {
-          id: result.user.id,
+          id: result.user.identifier,
         },
         auth: result.auth,
       },
@@ -32,14 +32,14 @@ export class AuthController {
   @Post('/signin')
   async signIn(@Body() body: SignInBody) {
     const result = await this.authService.signIn({
-      identifier: body.identifier,
+      identifier: body.id,
       password: body.password,
     });
 
     return {
       data: {
         user: {
-          id: result.user.id,
+          id: result.user.identifier,
         },
         auth: result.auth,
       },

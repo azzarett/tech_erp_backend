@@ -4,7 +4,7 @@ export class SignUpBody {
   @IsNotEmpty()
   @IsString()
   @MaxLength(255)
-  identifier: string;
+  id: string;
 
   @IsNotEmpty()
   @IsString()
