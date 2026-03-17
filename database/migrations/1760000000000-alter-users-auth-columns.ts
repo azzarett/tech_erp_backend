@@ -2,7 +2,7 @@ import {
   MigrationInterface,
   QueryRunner,
   TableColumn,
-  TableUnique,
+  TableIndex,
 } from 'typeorm';
 
 export class AlterUsersAuthColumns1760000000000 implements MigrationInterface {
@@ -22,11 +22,12 @@ export class AlterUsersAuthColumns1760000000000 implements MigrationInterface {
       }),
     ]);
 
-    await queryRunner.createUniqueConstraint(
+    await queryRunner.createIndex(
       'users',
-      new TableUnique({
+      new TableIndex({
         name: 'users_identifier_unique',
         columnNames: ['identifier'],
+        isUnique: true,
       }),
     );
 
@@ -61,7 +62,7 @@ export class AlterUsersAuthColumns1760000000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropUniqueConstraint('users', 'users_identifier_unique');
+    await queryRunner.dropIndex('users', 'users_identifier_unique');
     await queryRunner.dropColumn('users', 'password');
     await queryRunner.dropColumn('users', 'identifier');
   }
